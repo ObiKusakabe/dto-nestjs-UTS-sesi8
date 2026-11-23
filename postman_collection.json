@@ -1,0 +1,495 @@
+{
+  "info": {
+    "_postman_id": "labgear-api-uts-collection",
+    "name": "LabGear API — UTS Web Service NestJS",
+    "description": "Postman Collection untuk pengujian LabGear API (UTS Web Service NestJS) oleh Roby Rachmat Firdaus (240414015) 3IF-01.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Folder 1 — UTS Positif (Valid Requests)",
+      "item": [
+        {
+          "name": "GET Equipment (Filter & Pagination) - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment?category=ELECTRONIC&page=1&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "ELECTRONIC"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Equipment by ID - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Equipment (Valid) - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-NW-002\",\n  \"name\": \"Cisco Catalyst Switch 2960\",\n  \"category\": \"NETWORK\",\n  \"condition\": \"GOOD\",\n  \"stock\": 10,\n  \"location\": \"Lab Jaringan Komputer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Loan Request (Valid) - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414015\",\n  \"borrowerName\": \"Roby Rachmat Firdaus\",\n  \"borrowerEmail\": \"roby.firdaus@student.lpkia.ac.id\",\n  \"assetCode\": \"LAB-EL-001\",\n  \"quantity\": 2,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-27\",\n  \"purpose\": \"Praktikum mandiri pengukuran sinyal osiloskop sinyal AC\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Loan Request by ID - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Loan Request (Valid) - 200 OK",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"returnDate\": \"2026-11-29\",\n  \"purpose\": \"Perpanjangan jadwal analisis frekuensi rangkaian RLC\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Folder 2 — UTS Negatif (ValidationPipe & DTO Errors)",
+      "item": [
+        {
+          "name": "POST Equipment - AssetCode Regex Invalid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-123\",\n  \"name\": \"Kabel LAN Tester\",\n  \"category\": \"NETWORK\",\n  \"condition\": \"GOOD\",\n  \"stock\": 5,\n  \"location\": \"Lab Jaringan\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Loan Request - Borrower NIM Invalid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"NIM12345\",\n  \"borrowerName\": \"Roby Rachmat Firdaus\",\n  \"borrowerEmail\": \"roby@student.lpkia.ac.id\",\n  \"assetCode\": \"LAB-EL-001\",\n  \"quantity\": 1,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-27\",\n  \"purpose\": \"Praktikum mandiri pengukuran sinyal osiloskop\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Equipment - Stock Decimal or Exceeds 50 (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-OT-002\",\n  \"name\": \"Tang Crimping RJ45\",\n  \"category\": \"OTHER\",\n  \"condition\": \"GOOD\",\n  \"stock\": 75,\n  \"location\": \"Lab Terpadu\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Loan Request - Quantity Zero or Exceeds 3 (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414015\",\n  \"borrowerName\": \"Roby Rachmat Firdaus\",\n  \"borrowerEmail\": \"roby@student.lpkia.ac.id\",\n  \"assetCode\": \"LAB-EL-001\",\n  \"quantity\": 5,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-27\",\n  \"purpose\": \"Praktikum mandiri pengukuran sinyal osiloskop\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Equipment - Invalid Enum & Extra Field (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-NW-003\",\n  \"name\": \"Access Point TP-Link\",\n  \"category\": \"HARDWARE_INVALID\",\n  \"condition\": \"GOOD\",\n  \"stock\": 10,\n  \"location\": \"Lab Jaringan\",\n  \"extraField\": \"not_allowed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Loan Request - Invalid Email & System Field (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414015\",\n  \"borrowerName\": \"Roby Rachmat Firdaus\",\n  \"borrowerEmail\": \"roby-bukan-email\",\n  \"assetCode\": \"LAB-EL-001\",\n  \"quantity\": 1,\n  \"startDate\": \"2026-11-25\",\n  \"returnDate\": \"2026-11-27\",\n  \"purpose\": \"Praktikum mandiri pengukuran sinyal osiloskop\",\n  \"status\": \"APPROVED\",\n  \"createdAt\": \"2026-11-23T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Folder 3 — Pengembangan (Extended Features)",
+      "item": [
+        {
+          "name": "POST Loan Request - Cross-Field Date Error (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"borrowerNim\": \"240414015\",\n  \"borrowerName\": \"Roby Rachmat Firdaus\",\n  \"borrowerEmail\": \"roby.firdaus@student.lpkia.ac.id\",\n  \"assetCode\": \"LAB-EL-001\",\n  \"quantity\": 1,\n  \"startDate\": \"2026-11-28\",\n  \"returnDate\": \"2026-11-25\",\n  \"purpose\": \"Praktikum mandiri pengukuran sinyal osiloskop\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Labs (List Ruang Lab) - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/labs",
+              "host": ["{{baseUrl}}"],
+              "path": ["labs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Labs (Valid) - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"labCode\": \"ROOM-NW-02\",\n  \"name\": \"Laboratorium Cloud & Cybersecurity\",\n  \"building\": \"Gedung C Lt. 2\",\n  \"capacity\": 35,\n  \"picName\": \"Agung Dea Yulaksana\",\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/labs",
+              "host": ["{{baseUrl}}"],
+              "path": ["labs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Labs - Regex labCode Invalid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"labCode\": \"LAB-123\",\n  \"name\": \"Laboratorium Percobaan\",\n  \"building\": \"Gedung A Lt. 1\",\n  \"capacity\": 20,\n  \"picName\": \"Petugas\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/labs",
+              "host": ["{{baseUrl}}"],
+              "path": ["labs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Labs by ID - 200 OK",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capacity\": 40,\n  \"picName\": \"Agung Dea Yulaksana, M.Kom.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/labs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["labs", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Maintenance Logs - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/maintenance-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance-logs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Maintenance Logs (Valid) - 201 Created",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-001\",\n  \"reportedBy\": \"Roby Rachmat Firdaus\",\n  \"issueDescription\": \"Kipas pendingin mati saat proyektor menyala 10 menit\",\n  \"severity\": \"HIGH\",\n  \"scheduledDate\": \"2026-11-28\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/maintenance-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance-logs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Maintenance Logs - Status Field Rejected (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assetCode\": \"LAB-MM-001\",\n  \"reportedBy\": \"Roby Rachmat Firdaus\",\n  \"issueDescription\": \"Lampu mati\",\n  \"severity\": \"LOW\",\n  \"scheduledDate\": \"2026-11-28\",\n  \"status\": \"RESOLVED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/maintenance-logs",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance-logs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Maintenance Log Resolve - 200 OK",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/maintenance-logs/1/resolve",
+              "host": ["{{baseUrl}}"],
+              "path": ["maintenance-logs", "1", "resolve"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Equipment by ID - 200 OK",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stock\": 15,\n  \"condition\": \"GOOD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/equipment/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Loan Requests (Query Filter Status) - 200 OK",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/loan-requests?status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["loan-requests"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
